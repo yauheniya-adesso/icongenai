@@ -1,0 +1,25 @@
+research/
+icon-sets/
+
+data/*.jsonl
+data/*.json
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# MacOS files
+.DS_Store
+
+# Claude-specific files
+.claude/
+
+# Secret files
+*.env

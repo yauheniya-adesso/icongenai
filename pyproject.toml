@@ -1,0 +1,17 @@
+[project]
+name = "icon-genai"
+version = "0.1.0"
+description = "Fine-tuning an LLM on Iconify SVG code + natural language descriptions for icon generation"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    # Step 1: dataset collection (pure Python, no system deps)
+    "tqdm>=4.66",
+    # Step 2: SVG rendering + vision captioning on Apple Silicon
+    "cairosvg>=2.7",      # requires: brew install cairo
+    "Pillow>=10.0",
+    "mlx-vlm>=0.1.0",     # Apple Silicon only — Qwen3.5-VL vision inference
+    # Step 3+: fine-tuning on Apple Silicon
+    "mlx-lm>=0.20",       # Apple Silicon only — LoRA fine-tuning with mlx
+    "transformers==5.1.0",
+]
