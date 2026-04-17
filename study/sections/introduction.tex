@@ -1,0 +1,80 @@
+% ---- Introduction -----------------------------------------------------------
+% Target length: ~1 page.
+% Structure: (1) problem & motivation, (2) gap in prior work,
+%            (3) our approach overview, (4) contributions list.
+
+Icons are the visual vocabulary of modern user interfaces. Every button, menu,
+notification, and action is accompanied by a small vector graphic that must
+communicate its meaning instantly and scale perfectly from 16 to 512 pixels.
+Professional icon libraries --- Heroicons, Material Symbols, Tabler, Lucide ---
+contain tens of thousands of carefully crafted SVG files, but they cannot cover
+the long tail of application-specific concepts: a domain-specific status
+indicator, a company-branded element, or a novel UI affordance.
+
+Generating icons programmatically from natural language would allow designers
+and developers to describe what they need --- \textit{"a credit card with three
+sparkles in the top right corner"} --- and receive a production-ready SVG file
+that renders pixel-perfectly at any resolution and remains fully editable in
+vector design tools.
+
+\paragraph{The gap in existing approaches.}
+Text-to-image diffusion models \citep{rombach2022ldm, saharia2022imagen} can
+produce visually plausible icon-like images, but the output is a raster bitmap,
+not a vector graphic. Converting a raster to SVG via auto-tracing produces
+imprecise, verbose path data unsuitable for production use. Text-to-SVG methods
+based on Score Distillation Sampling \citep{jain2023vectorfusion, xing2024svgdreamer}
+optimize Bézier control points to match a target image, yielding semantically
+reasonable results for illustrations but generating many redundant paths,
+lacking the clean single-path-per-shape structure of handcrafted icons, and
+taking tens of seconds per image.
+
+LLM-based SVG generation \citep{rodriguez2025starvector, yang2025omnisvg,
+xing2025llm4svg} has recently demonstrated that treating SVG as code leads to
+more structured, editable outputs. However, these models are trained on general
+SVG corpora covering logos, diagrams, and illustrations, with no domain-specific
+focus on icons. Icon generation requires a distinct competency: producing
+compact, semantically precise SVG code within the strict conventions of icon
+design (single-color fills using \texttt{currentColor}, consistent viewBox, minimal
+path count, high semantic clarity).
+
+\paragraph{Our approach.}
+We fine-tune Qwen3.5-9B \citep{qwen3} --- a state-of-the-art code language model
+--- on a dataset of \num{275912} (SVG icon, natural language description) pairs
+using LoRA \citep{hu2022lora}. The natural language descriptions are generated
+automatically by a vision language model (Qwen2.5-VL-7B \citep{qwen25vl})
+applied to rendered PNG images of each icon, following an established automated
+annotation pipeline \citep{rodriguez2025starvector, xing2025llm4svg}.
+
+The resulting model, \textbf{\method}, generates valid, renderable SVG code for
+icon prompts in under one second. Unlike diffusion-based approaches, the output
+is natively editable, consistently structured, and follows the conventions
+expected by professional design and development workflows.
+
+\paragraph{Contributions.}
+\begin{enumerate}
+    \item \textbf{The \dataset{} Corpus.} A curated dataset of \num{275912}
+          SVG icons from the Iconify open-source ecosystem, filtered by license
+          (excluding ShareAlike and GPL variants), normalized to a consistent
+          SVG format, and annotated with VLM-generated natural language
+          descriptions. To our knowledge, this is the first publicly documented
+          use of Iconify as a machine learning training corpus.
+
+    \item \textbf{An automated icon annotation pipeline.} A reproducible
+          pipeline for rendering SVG icons and generating structured
+          short and long natural language descriptions using a vision language
+          model, with documented prompt engineering and quality metrics.
+
+    \item \textbf{\method.} A domain-specific text-to-SVG model fine-tuned with
+          LoRA on Qwen3.5-9B, trained specifically for icon generation with
+          curriculum ordering (simple to complex) and multi-variant instruction
+          augmentation.
+
+    \item \textbf{An icon-specific evaluation framework.} Metrics tailored to
+          icon generation quality: SVG validity rate, rendering fidelity,
+          semantic alignment (CLIP score), and structural economy (path count),
+          together with a held-out test set of \num{13795} icons for
+          reproducible benchmarking.
+\end{enumerate}
+
+Code, model weights, and the \dataset{} corpus are released at:
+\url{https://github.com/TODO/icon-genai} under open-source licenses.

@@ -1,0 +1,97 @@
+% ---- Experiments ------------------------------------------------------------
+% This section is largely a TODO until training and evaluation are complete.
+% Write the setup and metrics now; fill in results later.
+
+\todo{This section is a template. Fill in all tables and results after
+training and evaluation are complete.}
+
+\subsection{Evaluation Metrics}
+
+We evaluate on the held-out test split of 13,896 icons. For each test icon,
+the model receives the short VLM caption as the prompt and generates SVG code.
+We measure the following:
+
+\begin{itemize}
+    \item \textbf{SVG Validity Rate (VR):} fraction of generated outputs that
+          parse as well-formed XML with a valid root \texttt{<svg>} element.
+          A model that generates syntactically broken SVG is unusable.
+
+    \item \textbf{Rendering Success Rate (RSR):} fraction of valid SVGs that
+          render without errors using CairoSVG. Catches semantic issues such
+          as malformed \texttt{d} attributes that parse as XML but fail to render.
+
+    \item \textbf{CLIP Score:} cosine similarity between the CLIP \citep{radford2021clip}
+          embedding of the rendered icon PNG and the CLIP embedding of the
+          text prompt, measuring semantic alignment. We use
+          ViT-B/32 \citep{radford2021clip} as the backbone.
+
+    \item \textbf{Mean Path Count (MPC):} average number of \texttt{<path>}
+          elements in generated icons. Lower is preferable; professional icons
+          typically use 1--5 paths. This measures structural economy.
+
+    \item \textbf{FID (Fréchet Inception Distance):} distributional similarity
+          between rendered generated icons and rendered ground-truth icons,
+          computed over the test split. Lower is better.
+\end{itemize}
+
+\subsection{Baselines}
+
+\begin{itemize}
+    \item \textbf{Qwen3.5-9B (zero-shot):} the base model without fine-tuning,
+          prompted with the same system and user messages as \method{}. This
+          isolates the contribution of fine-tuning.
+
+    \item \textbf{GPT-4o (zero-shot):} OpenAI's GPT-4o prompted via the API
+          to generate SVG icon code from the same prompts. Represents the
+          upper bound of general-purpose LLM capability on this task.
+
+    \item \textbf{StarVector-8B} \citep{rodriguez2025starvector}: the best
+          publicly available open-weight SVG generation model at the time of
+          writing.
+
+    \item \textbf{OmniSVG} \citep{yang2025omnisvg}: trained on MMSVG-2M
+          including an icon subset.
+\end{itemize}
+
+\subsection{Quantitative Results}
+
+\todo{Fill in Table~\ref{tab:main_results} once evaluation is complete.}
+
+\begin{table}[h]
+\centering
+\caption{Main results on the \dataset{} test split. Best results in \textbf{bold}.}
+\label{tab:main_results}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Model} & \textbf{VR (\%)} & \textbf{RSR (\%)} & \textbf{CLIP $\uparrow$} & \textbf{MPC $\downarrow$} & \textbf{FID $\downarrow$} \\
+\midrule
+Qwen3.5-9B (zero-shot) & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+GPT-4o (zero-shot)     & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+StarVector-8B          & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+OmniSVG                & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+\midrule
+\textbf{\method{} (ours)} & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Ablation Studies}
+
+\todo{Run and fill in Table~\ref{tab:ablation} once training is complete.}
+
+\begin{table}[h]
+\centering
+\caption{Ablation study on key design decisions.}
+\label{tab:ablation}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Variant} & \textbf{VR (\%)} & \textbf{RSR (\%)} & \textbf{CLIP $\uparrow$} & \textbf{FID $\downarrow$} \\
+\midrule
+\method{} (full)           & \todo{} & \todo{} & \todo{} & \todo{} \\
+\quad w/o curriculum       & \todo{} & \todo{} & \todo{} & \todo{} \\
+\quad w/o augmentation     & \todo{} & \todo{} & \todo{} & \todo{} \\
+\quad short captions only  & \todo{} & \todo{} & \todo{} & \todo{} \\
+\quad 1 epoch (vs.\ 3)     & \todo{} & \todo{} & \todo{} & \todo{} \\
+\bottomrule
+\end{tabular}
+\end{table}

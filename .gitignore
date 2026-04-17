@@ -23,3 +23,6 @@ wheels/
 
 # Secret files
 *.env
+
+# Logs
+logs/

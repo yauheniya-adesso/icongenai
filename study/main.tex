@@ -1,0 +1,100 @@
+% =============================================================================
+%  IconGenAI: Fine-tuning a Code LLM for Text-to-SVG Icon Generation
+%  via the Iconify Corpus
+% =============================================================================
+%
+%  Template: NeurIPS-style (adapt to target venue by swapping \documentclass)
+%  Build:    pdflatex main && biber main && pdflatex main && pdflatex main
+%  Overleaf: upload all files under study/ and compile main.tex
+%
+% =============================================================================
+
+\documentclass[10pt, a4paper]{article}
+
+% --- Packages ---
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{booktabs}       % professional tables
+\usepackage{multirow}       % multi-row cells
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}       % code listings
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}     % subfigures
+\usepackage{microtype}      % better justification
+\usepackage[style=authoryear, backend=biber, maxnames=99, url=true, doi=true, natbib=true]{biblatex}
+\usepackage{siunitx}        % \num{275912} → 275,912 with thousand separators
+\addbibresource{references.bib}
+
+% --- Code listing style ---
+\lstdefinestyle{svgstyle}{
+    language=XML,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{orange},
+    breaklines=true,
+    frame=single,
+    xleftmargin=1em,
+    xrightmargin=1em,
+}
+
+% --- Custom commands ---
+\newcommand{\method}{IconGenAI}          % model name — change if needed
+\newcommand{\dataset}{Iconify-SVG}     % dataset name
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+
+% =============================================================================
+\begin{document}
+
+\title{\method: Text-to-SVG Icon Generation via\\
+       Domain-Specific Fine-tuning of a Code Language Model}
+
+\author{
+  Yauheniya Varabyova \\
+  adesso SE \\
+  \texttt{yauheniya.varabyova@adesso.de}
+}
+
+\date{April 2026}
+\maketitle
+
+% =============================================================================
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+% =============================================================================
+\section{Introduction}
+\input{sections/introduction}
+
+% =============================================================================
+\section{Related Work}
+\input{sections/related_work}
+
+% =============================================================================
+\section{The \dataset{} Corpus}
+\input{sections/dataset}
+
+% =============================================================================
+\section{Method}
+\input{sections/method}
+
+% =============================================================================
+\section{Experiments}
+\input{sections/experiments}
+
+% =============================================================================
+\section{Analysis}
+\input{sections/analysis}
+
+% =============================================================================
+\section{Conclusion}
+\input{sections/conclusion}
+
+% =============================================================================
+\printbibliography
+
+\end{document}

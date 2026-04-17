@@ -1,0 +1,112 @@
+% ---- Method -----------------------------------------------------------------
+% Target length: ~1 page.
+% Structure: SVG representation, base model, training formulation, LoRA, curriculum.
+
+\subsection{SVG as Code}
+
+SVG is an XML-based language for describing two-dimensional vector graphics.
+An icon SVG typically consists of a root \texttt{<svg>} element with a
+\texttt{viewBox} attribute defining the coordinate space, followed by one or
+more geometric primitives: \texttt{<path>} elements with \texttt{d} attributes
+encoding sequences of drawing commands (MoveTo, LineTo, CubicBézier,
+EllipticalArc, ClosePath), and optionally \texttt{<circle>}, \texttt{<rect>},
+\texttt{<polygon>}, or \texttt{<g>} grouping elements.
+
+This structure is naturally representable as a text sequence, and modern code
+language models pre-trained on source code corpora have already seen XML and
+SVG-like content in their training data. We leverage this prior knowledge by
+treating icon generation as instruction-following code generation: given a
+natural language description as the user instruction, produce a complete,
+valid SVG document as the assistant response.
+
+\subsection{Base Model}
+
+We use Qwen3.5-9B \citep{qwen3} as the base model. Qwen3.5 represents the
+current generation of Qwen language models \citep{qwen25}, featuring a 128K
+token context window (important for complex SVGs), strong performance on code
+generation benchmarks, and native instruction-following capabilities through
+the ChatML prompt format. The 9B parameter scale balances generation quality
+with the memory and compute constraints of local Apple Silicon hardware.
+
+\subsection{Instruction-Tuning Formulation}
+
+Each training example is formatted as a three-turn conversation in the
+ChatML format used by Qwen3.5:
+
+\begin{lstlisting}[style=svgstyle, caption={Training record format (ChatML)}]
+{"messages": [
+  {"role": "system",
+   "content": "You are an SVG icon generator. Given a description,
+               output clean, valid SVG code for a single icon. Use
+               currentColor for fill and stroke. Output only the
+               SVG element, no explanation."},
+  {"role": "user",
+   "content": "Generate an SVG icon: outlined credit card with sparkles"},
+  {"role": "assistant",
+   "content": "<svg xmlns=... viewBox=...><path .../></svg>"}
+]}
+\end{lstlisting}
+
+\subsection{Data Augmentation}
+
+For each icon we generate up to three training variants with different
+user-side prompts pointing to the same SVG target:
+(1) the short VLM caption (\textit{"outlined credit card with sparkles"}),
+(2) the long VLM caption (full description with style and context), and
+(3) the raw icon name from the Iconify metadata (\textit{"credit-card"}).
+This teaches the model to handle prompts of varying specificity and phrasing,
+reflecting the diversity of real-world user queries.
+
+\subsection{Curriculum Learning}
+\label{sec:curriculum}
+
+Following \citet{svgen2025}, training examples are ordered from simple to
+complex using a two-level sort key: (1) monochrome icons before multicolor,
+(2) ascending path count within each group. This curriculum strategy exposes
+the model to the dominant icon patterns first, grounding its SVG priors before
+introducing the long-tail of complex multicolor icons.
+
+\subsection{LoRA Fine-tuning}
+\label{sec:lora}
+
+We apply Low-Rank Adaptation \citep{hu2022lora} to fine-tune Qwen3.5-9B,
+keeping the pre-trained weights frozen and adding trainable low-rank matrices
+$A \in \mathbb{R}^{d \times r}$ and $B \in \mathbb{R}^{r \times d}$ at each
+attention and MLP projection layer. The effective weight update is:
+
+\[
+W' = W + \alpha \cdot A B
+\]
+
+where $r$ is the rank (we use $r = 64$) and $\alpha$ is a scaling factor.
+With 4-bit quantization of the frozen base weights (QLoRA), total GPU memory
+is under 16~GB, enabling training on Apple M4 hardware via the MLX framework
+\citep{mlx2023}.
+
+\paragraph{Training configuration.}
+\todo{Fill in after training:
+batch size, learning rate, number of iterations, hardware, training time per epoch.}
+Table~\ref{tab:training_config} summarises the training hyperparameters.
+
+\begin{table}[h]
+\centering
+\caption{Training configuration for \method{}.}
+\label{tab:training_config}
+\begin{tabular}{ll}
+\toprule
+\textbf{Hyperparameter} & \textbf{Value} \\
+\midrule
+Base model      & Qwen3.5-9B-Instruct \\
+Quantization    & 4-bit (QLoRA) \\
+LoRA rank $r$   & 64 \\
+LoRA $\alpha$   & 128 \\
+LoRA target layers & attention + MLP projections \\
+Training epochs & 2--3 \\
+Batch size      & \todo{X} \\
+Learning rate   & \todo{X} \\
+Training records & \todo{X} (with augmentation) \\
+Hardware        & Apple M4 / \todo{cloud GPU} \\
+Training time   & \todo{X hours} \\
+\bottomrule
+\end{tabular}
+\end{table}

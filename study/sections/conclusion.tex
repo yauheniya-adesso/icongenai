@@ -1,0 +1,31 @@
+% ---- Conclusion -------------------------------------------------------------
+% Write last. Short (~0.5 page): restate contributions, key finding, future work.
+
+\todo{Write after experiments are complete. Draft outline:}
+
+We presented \method{}, a domain-specific language model for text-to-SVG icon
+generation. We introduced the \dataset{} corpus --- \num{275912} license-filtered,
+normalized SVG icons from the Iconify ecosystem, annotated with VLM-generated
+natural language descriptions --- and demonstrated that LoRA fine-tuning of
+Qwen3.5-9B on this corpus yields a model that generates valid, renderable,
+semantically aligned SVG icons from natural language prompts.
+
+\todo{Insert key numerical finding.}
+
+\paragraph{Limitations.}
+The \dataset{} corpus reflects the distribution of the Iconify ecosystem:
+predominantly single-color, geometric icons in flat or outline styles. The
+model may generalize poorly to photorealistic SVGs, complex illustrations,
+or icon styles not represented in Iconify. Caption quality depends on the
+vision model and prompt template; a small fraction of icons receive semantically
+inaccurate descriptions that may reduce training signal quality.
+
+\paragraph{Future work.}
+We identify three promising directions. First, incorporating reasoning-enhanced
+training \citep{svgen2025, reason_svg2025} via GRPO reinforcement learning may
+further improve structural validity without increasing dataset size. Second,
+interactive editing --- given an existing icon and a textual modification
+instruction, produce an updated SVG --- is a natural extension enabled by the
+instruction-following formulation. Third, evaluating the model in a
+user study with designers and front-end developers would provide ecological
+validity beyond the automated metrics used here.

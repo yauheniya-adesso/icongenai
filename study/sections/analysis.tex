@@ -1,0 +1,55 @@
+% ---- Analysis ---------------------------------------------------------------
+% Write qualitative analysis after training. Placeholders for now.
+
+\subsection{Qualitative Examples}
+
+\todo{Insert a figure grid: 3--4 rows of (prompt, generated SVG, ground-truth icon)
+showing representative successes across icon styles.
+Row 1: simple monochrome outline icons (e.g., arrows, UI actions)
+Row 2: multicolor icons or icons with badges/decorators
+Row 3: abstract/metaphorical icons (e.g., "speed", "security")
+Row 4: multi-element compositions}
+
+\begin{figure}[h]
+    \centering
+    \todo{Insert figure: qualitative\_examples.pdf}
+    \caption{Representative \method{} outputs alongside their prompts
+    and the closest ground-truth icons from the test split.}
+    \label{fig:qualitative}
+\end{figure}
+
+\subsection{Failure Modes}
+
+\todo{Analyse and describe after evaluation. Expected failure cases based on
+prior work and dataset properties:}
+
+\begin{itemize}
+    \item \textbf{Rare or abstract concepts} — icons for uncommon concepts
+          (e.g., domain-specific technical symbols) that appear infrequently
+          in training may produce generic or semantically misaligned outputs.
+
+    \item \textbf{Complex multi-element compositions} — icons described as
+          having more than 3--4 distinct visual elements tend to have lower
+          rendering fidelity, consistent with the SVGenius finding that quality
+          degrades with rising SVG complexity.
+
+    \item \textbf{Invalid path data} — occasionally the model generates
+          syntactically plausible but geometrically malformed \texttt{d}
+          attributes (e.g., missing coordinate pairs after a command letter).
+          This manifests as rendering errors. \todo{Quantify rate.}
+
+    \item \textbf{ViewBox mismatch} — some generated icons place content
+          outside the declared viewBox, resulting in clipped rendering.
+\end{itemize}
+
+\subsection{Caption Quality Ablation}
+
+\todo{Compare: (1) VLM-generated captions vs. (2) raw icon names as prompts
+for fine-tuning. This isolates the contribution of the captioning pipeline.}
+
+\subsection{Comparison with General SVG Models}
+
+\todo{Discuss qualitative differences between \method{} and StarVector/OmniSVG
+on icon-specific prompts. Hypothesis: general models produce more complex,
+less icon-like SVG structure; \method{} produces compact, \texttt{currentColor}
+convention-following icons consistent with professional icon libraries.}

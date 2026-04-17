@@ -1,0 +1,154 @@
+% ---- Dataset ----------------------------------------------------------------
+% Target length: ~1.5 pages.
+% Structure: source, collection, license filter, normalization,
+%            captioning pipeline, statistics, analysis.
+
+\subsection{Source: The Iconify Ecosystem}
+
+Iconify\footnote{\url{https://iconify.design}} is an open-source meta-library
+aggregating over 300,000 icons from 225 icon sets. Unlike individual icon
+libraries, Iconify provides a unified JSON format and a public GitHub repository
+(\texttt{iconify/icon-sets}) containing all icons as structured data without
+requiring web scraping. Each set carries explicit license metadata, making
+per-set license filtering straightforward.
+
+\subsection{License Filtering}
+\label{sec:license}
+
+Machine learning training use is governed by the license terms of the training
+data. We apply a conservative license filter that retains only sets under
+permissive open-source licenses and excludes all ShareAlike and copyleft
+variants, as detailed in Table~\ref{tab:licenses}.
+
+\begin{table}[h]
+\centering
+\caption{License filter applied to Iconify collections. ShareAlike and GPL
+licenses are excluded due to their potential implications for model weight
+distribution.}
+\label{tab:licenses}
+\begin{tabular}{lrrl}
+\toprule
+\textbf{License (SPDX)} & \textbf{Sets} & \textbf{Icons} & \textbf{Decision} \\
+\midrule
+MIT           & 99 & 114,830 & \textcolor{green!60!black}{Include} \\
+Apache-2.0    & 30 &  82,644 & \textcolor{green!60!black}{Include} \\
+CC-BY-4.0     & 51 &  55,648 & \textcolor{green!60!black}{Include} \\
+CC0-1.0       &  8 &   8,051 & \textcolor{green!60!black}{Include} \\
+OFL-1.1       & 13 &   6,211 & \textcolor{green!60!black}{Include} \\
+CC-BY-3.0     &  1 &   4,123 & \textcolor{green!60!black}{Include} \\
+ISC           &  3 &   2,998 & \textcolor{green!60!black}{Include} \\
+CC-BY-NC-4.0  &  1 &     479 & \textcolor{green!60!black}{Include (non-commercial)} \\
+Unlicense     &  1 &     430 & \textcolor{green!60!black}{Include} \\
+MPL-2.0       &  1 &     288 & \textcolor{green!60!black}{Include} \\
+BSD-3-Clause  &  1 &     210 & \textcolor{green!60!black}{Include} \\
+\midrule
+CC-BY-SA-4.0  &  7 &  21,828 & \textcolor{red}{Exclude (ShareAlike)} \\
+CC-BY-NC-SA-4.0 & 1 & 1,577 & \textcolor{red}{Exclude (ShareAlike)} \\
+CC-BY-SA-3.0  &  2 &      79 & \textcolor{red}{Exclude (ShareAlike)} \\
+GPL-*         &  6 &   1,522 & \textcolor{red}{Exclude (Copyleft)} \\
+\midrule
+\textbf{Total included} & \textbf{209} & \textbf{275,912} & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Additionally, 9,045 icons marked as \texttt{hidden} in the Iconify metadata
+(deprecated or internal entries) are excluded, and alias entries (icons defined
+as references to parent icons) are skipped to avoid duplicate training samples.
+
+This study is conducted for non-commercial research purposes. Beyond license
+terms, we note that (1) the EU DSM Directive (Article 4) explicitly permits
+text and data mining of lawfully accessed content for research use; (2) the
+trained model weights are a derivative work that does not reproduce training
+icons verbatim. Each record in the released dataset retains the original
+Iconify metadata fields \texttt{collection\_name}, \texttt{license\_spdx},
+\texttt{author}, and \texttt{license\_url}, enabling downstream users to
+comply with the attribution requirements of CC-BY and similar licenses.
+
+\subsection{SVG Normalization}
+
+Raw Iconify data consists of SVG \texttt{body} fragments — the inner content
+of the \texttt{<svg>} element without the root tag or namespace declaration.
+We assemble each icon into a complete, valid SVG document:
+
+\begin{lstlisting}[style=svgstyle, caption={Assembled SVG document format}]
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 {W} {H}" width="{W}" height="{H}">
+  {body}
+</svg>
+\end{lstlisting}
+
+Two color conventions appear in the corpus. \emph{Monochrome} icons (the
+majority) use \texttt{currentColor} as the fill and stroke value — the
+standard convention in icon design that allows the icon to inherit its
+context's text color. \emph{Multicolor} icons contain explicit color values
+(hex codes, named colors, or \texttt{rgb()} expressions) hardcoded in the
+path elements, e.g.\ \texttt{fill="\#4285F4"}. Each record carries an \texttt{is\_multicolor} boolean flag computed by
+scanning the SVG body for explicit color values (hex codes, \texttt{rgb()},
+or the named colors \texttt{white}/\texttt{black}) outside any
+\texttt{currentColor} reference. This flag is used during curriculum
+ordering (Section~\ref{sec:curriculum}) to expose the model to simple
+monochrome icons before the more complex multicolor ones.
+
+\subsection{Automated Caption Generation}
+\label{sec:captioning}
+
+Natural language descriptions are generated using Qwen2.5-VL-7B-Instruct
+\citep{qwen25vl}, a vision language model running on Apple Silicon via the
+MLX framework \citep{mlx2023}. Each icon is rendered to a 256$\times$256 PNG
+using CairoSVG and passed to the VLM with a structured prompting template.
+
+We generate two caption variants per icon:
+
+\begin{itemize}
+    \item \textbf{Short caption (5--12 words):} a natural search query expressing
+          the concept and visual style, e.g., \textit{"outlined credit card with
+          sparkles"} or \textit{"filled shopping cart with checkmark badge"}.
+          This serves as the primary training prompt.
+    \item \textbf{Long caption (20--35 words):} a detailed description including
+          visual style (outline/filled/flat/solid/line), all visible elements,
+          any decorations or modifiers, and likely UI context.
+\end{itemize}
+
+The icon name and collection name from Iconify metadata are provided as context
+in the prompt, helping the model identify the semantic intent of ambiguous icons.
+Caption generation runs checkpointed at the icon level, enabling resumable
+processing across multiple sessions.
+
+\todo{Report: total captioning time, model throughput, fraction of icons
+requiring fallback to icon name (parse failure rate).}
+
+\subsection{Dataset Statistics}
+
+\todo{Add figures once captioning is complete:
+(1) distribution of path\_count (histogram);
+(2) proportion monochrome vs. multicolor by collection;
+(3) caption length distribution (short and long);
+(4) most frequent concepts in short captions (word cloud or bar chart);
+(5) sample grid of icons across collections.}
+
+Table~\ref{tab:dataset_stats} summarises the key characteristics of the
+\dataset{} corpus.
+
+\begin{table}[h]
+\centering
+\caption{\dataset{} corpus statistics.}
+\label{tab:dataset_stats}
+\begin{tabular}{lr}
+\toprule
+\textbf{Attribute} & \textbf{Value} \\
+\midrule
+Total icons            & 275,912 \\
+Icon sets              & 209 \\
+Monochrome icons       & \todo{X\%} \\
+Multicolor icons       & \todo{X\%} \\
+Median path count      & \todo{X} \\
+Mean path count        & \todo{X} \\
+Mean short caption length (words) & \todo{X} \\
+Mean long caption length (words)  & \todo{X} \\
+Training split         & 248,120 (90\%) \\
+Validation split       &  13,896  (5\%) \\
+Test split             &  13,896  (5\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
