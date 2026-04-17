@@ -30,23 +30,32 @@
 \usepackage{siunitx}        % \num{275912} → 275,912 with thousand separators
 \addbibresource{references.bib}
 
+% --- Brand colors ---
+\definecolor{brandblue}{HTML}{006EC7}
+\definecolor{brandpurple}{HTML}{461EBE}
+\definecolor{brandorange}{HTML}{FF9868}
+\definecolor{brandpink}{HTML}{F566BA}
+\definecolor{brandteal}{HTML}{28DCAA}
+\definecolor{brandgreen}{HTML}{76C800}
+
 % --- Code listing style ---
 \lstdefinestyle{svgstyle}{
     language=XML,
     basicstyle=\ttfamily\footnotesize,
-    keywordstyle=\color{blue},
-    commentstyle=\color{gray},
-    stringstyle=\color{orange},
+    keywordstyle=\color{brandblue},
+    commentstyle=\color{brandblue!50},
+    stringstyle=\color{brandblue!80},
     breaklines=true,
     frame=single,
+    rulecolor=\color{brandblue},
     xleftmargin=1em,
     xrightmargin=1em,
 }
 
 % --- Custom commands ---
-\newcommand{\method}{IconGenAI}          % model name — change if needed
-\newcommand{\dataset}{Iconify-SVG}     % dataset name
-\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+\newcommand{\method}{IconGenAI}
+\newcommand{\dataset}{Iconify-SVG}
+\newcommand{\todo}[1]{\textcolor{brandorange}{\textbf{[TODO: #1]}}}
 
 % =============================================================================
 \begin{document}

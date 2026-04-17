@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.16)  18 APR 2026 01:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.16)  18 APR 2026 01:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -713,28 +713,28 @@ Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
 \@quotelevel=\count471
 \@quotereset=\count472
 Package translations Info: No language package found. I am going to use `englis
-h' as default language. on input line 52.
+h' as default language. on input line 61.
  (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -770,7 +770,7 @@ LaTeX Font Info:    ... okay on input line 52.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 52.
+Package hyperref Info: Link coloring OFF on input line 61.
 (./main.out) (./main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
@@ -801,13 +801,13 @@ e
 \c@lstlisting=\count479
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 52.
-Package microtype Info: Applying patch `item' on input line 52.
-Package microtype Info: Applying patch `toc' on input line 52.
-Package microtype Info: Applying patch `eqnum' on input line 52.
-Package microtype Info: Applying patch `footnote' on input line 52.
-Package microtype Info: Applying patch `verbatim' on input line 52.
-LaTeX Info: Redefining \microtypesetup on input line 52.
+LaTeX Info: Redefining \microtypecontext on input line 61.
+Package microtype Info: Applying patch `item' on input line 61.
+Package microtype Info: Applying patch `toc' on input line 61.
+Package microtype Info: Applying patch `eqnum' on input line 61.
+Package microtype Info: Applying patch `footnote' on input line 61.
+Package microtype Info: Applying patch `verbatim' on input line 61.
+LaTeX Info: Redefining \microtypesetup on input line 61.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -838,8 +838,8 @@ Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
 
 (./main.bbl)
-Package biblatex Info: Reference section=0 on input line 52.
-Package biblatex Info: Reference segment=0 on input line 52.
+Package biblatex Info: Reference section=0 on input line 61.
+Package biblatex Info: Reference segment=0 on input line 61.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/translations/translations-basic-d
 ictionary-english.trsl
@@ -847,8 +847,8 @@ File: translations-basic-dictionary-english.trsl (english translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `english'. on input line 52.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 65.
+or `english'. on input line 61.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 74.
 
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -857,7 +857,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 65.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 74.
 
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -871,7 +871,7 @@ t>
 File: ../notebooks/output/model_comparison_grid.png Graphic file (type png)
 <use ../notebooks/output/model_comparison_grid.png>
 Package pdftex.def Info: ../notebooks/output/model_comparison_grid.png  used on
- input line 69.
+ input line 78.
 (pdftex.def)             Requested size: 452.9679pt x 285.11327pt.
 
 (./sections/abstract.tex [1
@@ -920,10 +920,10 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 27685 strings out of 467525
- 527709 string characters out of 5418982
- 1493255 words of memory out of 5000000
- 56021 multiletter control sequences out of 15000+600000
+ 27692 strings out of 467525
+ 527829 string characters out of 5418982
+ 1495774 words of memory out of 5000000
+ 56028 multiletter control sequences out of 15000+600000
  645143 words of font info for 183 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,9n,79p,997b,2077s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -948,7 +948,7 @@ exmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/local/texlive/2026/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2026/texmf
 -dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2026/t
 exmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on main.pdf (12 pages, 1618121 bytes).
+Output written on main.pdf (12 pages, 1618382 bytes).
 PDF statistics:
  455 PDF objects out of 1000 (max. 8388607)
  393 compressed objects within 4 object streams
