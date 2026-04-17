@@ -92,6 +92,7 @@ def main():
         print("       adapter: none (zero-shot)")
 
     from mlx_lm import load, generate
+    from mlx_lm.sample_utils import make_sampler
 
     model, tokenizer = load(args.model, adapter_path=adapter_path)
     print("Model loaded.\n")
@@ -133,7 +134,7 @@ def main():
                 tokenizer,
                 prompt=prompt_str,
                 max_tokens=args.max_tokens,
-                temp=args.temp,
+                sampler=make_sampler(temp=args.temp),
                 verbose=False,
             )
 

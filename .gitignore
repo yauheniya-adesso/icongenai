@@ -4,6 +4,8 @@ icon-sets/
 data/*.jsonl
 data/*.json
 
+CLAUDE.md
+
 # Python-generated files
 __pycache__/
 *.py[oc]

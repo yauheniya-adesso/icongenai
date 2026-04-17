@@ -36,21 +36,32 @@ We measure the following:
 
 \subsection{Baselines}
 
+We compare against two categories of baseline.
+\textit{Zero-shot LLM baselines} are general-purpose language models prompted
+with the same system and user messages as \method{}, but without any
+SVG-specific fine-tuning; the ``(zero-shot)'' label distinguishes these from
+models that were explicitly trained for SVG generation.
+\textit{Supervised SVG baselines} are models trained end-to-end on SVG
+corpora and represent the current open-weight state of the art.
+
 \begin{itemize}
     \item \textbf{Qwen3.5-9B (zero-shot):} the base model without fine-tuning,
-          prompted with the same system and user messages as \method{}. This
-          isolates the contribution of fine-tuning.
+          prompted identically to \method{}. Isolates the contribution of
+          domain-specific fine-tuning.
 
-    \item \textbf{GPT-4o (zero-shot):} OpenAI's GPT-4o prompted via the API
-          to generate SVG icon code from the same prompts. Represents the
-          upper bound of general-purpose LLM capability on this task.
+    \item \textbf{GPT-5.4 (zero-shot):}
+          OpenAI's GPT-5.4 prompted via the API with the same prompts.
+          Serves as a strong commercial LLM reference point.
+          Parameter count is not publicly disclosed.
 
-    \item \textbf{StarVector-8B} \citep{rodriguez2025starvector}: the best
-          publicly available open-weight SVG generation model at the time of
-          writing.
+    \item \textbf{StarVector-8B} \citep{rodriguez2025starvector}: an
+          8B-parameter open-weight model that frames SVG generation as
+          code generation from a vision-language backbone; state of the art
+          on general SVG vectorization at the time of writing.
 
-    \item \textbf{OmniSVG} \citep{yang2025omnisvg}: trained on MMSVG-2M
-          including an icon subset.
+    \item \textbf{OmniSVG-8B} \citep{yang2025omnisvg}: 8B-parameter model
+          trained on MMSVG-2M including a dedicated icon subset, making it
+          the most directly comparable supervised baseline.
 \end{itemize}
 
 \subsection{Quantitative Results}
@@ -61,16 +72,19 @@ We measure the following:
 \centering
 \caption{Main results on the \dataset{} test split. Best results in \textbf{bold}.}
 \label{tab:main_results}
-\begin{tabular}{lccccc}
+\begin{tabular}{lrccccc}
 \toprule
-\textbf{Model} & \textbf{VR (\%)} & \textbf{RSR (\%)} & \textbf{CLIP $\uparrow$} & \textbf{MPC $\downarrow$} & \textbf{FID $\downarrow$} \\
+\textbf{Model} & \textbf{Params} & \textbf{VR (\%)} & \textbf{RSR (\%)} & \textbf{CLIP $\uparrow$} & \textbf{MPC $\downarrow$} & \textbf{FID $\downarrow$} \\
 \midrule
-Qwen3.5-9B (zero-shot) & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
-GPT-4o (zero-shot)     & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
-StarVector-8B          & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
-OmniSVG                & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+\multicolumn{7}{l}{\textit{Commercial zero-shot}} \\
+\quad GPT-5.4                        & n/a           & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+\multicolumn{7}{l}{\textit{Open-weight zero-shot}} \\
+\quad Qwen3.5-\todo{1.7B or 9B}      & \todo{1.7B or 9B} & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+\multicolumn{7}{l}{\textit{SVG-specific (supervised)}} \\
+\quad StarVector-8B                  & 8B            & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+\quad OmniSVG-8B                     & 8B            & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
 \midrule
-\textbf{\method{} (ours)} & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+\textbf{\method{} (ours)}            & \todo{1.7B or 9B} & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
 \bottomrule
 \end{tabular}
 \end{table}

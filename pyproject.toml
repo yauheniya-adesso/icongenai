@@ -1,5 +1,5 @@
 [project]
-name = "icon-genai"
+name = "icongenai"
 version = "0.1.0"
 description = "Fine-tuning an LLM on Iconify SVG code + natural language descriptions for icon generation"
 readme = "README.md"
@@ -14,4 +14,11 @@ dependencies = [
     # Step 3+: fine-tuning on Apple Silicon
     "mlx-lm>=0.20",       # Apple Silicon only — LoRA fine-tuning with mlx
     "transformers==5.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "jupyterlab>=4.0",
+    "pandas>=2.0",
+    "matplotlib>=3.8",
 ]

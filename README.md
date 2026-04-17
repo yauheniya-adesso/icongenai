@@ -15,7 +15,8 @@ Fine-tuning a general-purpose LLM for text-to-SVG icon generation via QLoRA on t
 ```bash
 git clone https://github.com/yauheniya-adesso/icongenai.git
 cd icongenai
-uv sync
+uv sync                   # core dependencies
+uv sync --extra dev       # + JupyterLab, pandas, matplotlib (for notebooks)
 ```
 
 ## Full Pipeline
