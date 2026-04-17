@@ -1,6 +1,6 @@
 # IconGenAI
 
-Fine-tuning a code LLM (Qwen3.5-9B) for text-to-SVG icon generation via LoRA on the Iconify corpus.
+Fine-tuning a general-purpose LLM for text-to-SVG icon generation via QLoRA on the Iconify corpus.
 
 ## Prerequisites
 
