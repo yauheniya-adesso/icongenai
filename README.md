@@ -6,6 +6,7 @@ Fine-tuning a general-purpose LLM for text-to-SVG icon generation via QLoRA on t
 
 - macOS with Apple Silicon (training uses MLX)
 - [uv](https://docs.astral.sh/uv/) — Python package manager (`brew install uv`)
+- Cairo for SVG rendering (`brew install cairo`)
 - ~20 GB free disk space (models + data)
 - MacTeX for building the paper (`brew install --cask mactex`)
 
