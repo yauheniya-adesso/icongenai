@@ -31,24 +31,36 @@ taking tens of seconds per image.
 LLM-based SVG generation \citep{rodriguez2025starvector, yang2025omnisvg,
 xing2025llm4svg} has recently demonstrated that treating SVG as code leads to
 more structured, editable outputs. However, these models are trained on general
-SVG corpora covering logos, diagrams, and illustrations, with no domain-specific
-focus on icons. Icon generation requires a distinct competency: producing
-compact, semantically precise SVG code within the strict conventions of icon
-design (single-color fills using \texttt{currentColor}, consistent viewBox, minimal
-path count, high semantic clarity).
+SVG corpora covering logos, diagrams, and illustrations --- anime-style artwork,
+multi-colour paintings, and raster conversions --- with no focus on icons.
+
+More critically, \emph{no existing model targets monochrome icon generation
+specifically}. Professional icon sets --- Heroicons, Material Symbols, Tabler,
+Lucide --- use a single semantic colour via the \texttt{currentColor} CSS
+property, allowing icons to be instantly recoloured to match any brand or design
+system. This monochrome constraint is architecturally distinct from multi-colour
+SVG generation: the output is structurally simpler (fewer paths, no gradients,
+no colour layers) but semantically demanding --- the silhouette alone must convey
+the entire meaning of the icon. This focus on \emph{lightweight, pixel-perfect,
+immediately brandable monochrome icons} is what sets our work apart from all
+prior text-to-SVG studies.
 
 \paragraph{Our approach.}
-We fine-tune Qwen3.5-9B \citep{qwen3} --- a state-of-the-art code language model
---- on a dataset of \num{275912} (SVG icon, natural language description) pairs
-using LoRA \citep{hu2022lora}. The natural language descriptions are generated
-automatically by a vision language model (Qwen2.5-VL-7B \citep{qwen25vl})
-applied to rendered PNG images of each icon, following an established automated
-annotation pipeline \citep{rodriguez2025starvector, xing2025llm4svg}.
+We fine-tune Qwen3-Coder-30B \citep{qwen3} --- a state-of-the-art
+mixture-of-experts code language model --- on a dataset of \num{275912}
+(SVG icon, natural language description) pairs using LoRA \citep{hu2022lora}.
+The model is selected from a systematic comparison of Qwen and DeepSeek coder
+variants (see Figure~\ref{fig:model-comparison}). The natural language
+descriptions are generated automatically by a vision language model
+(Qwen2.5-VL-7B \citep{qwen25vl}) applied to rendered PNG images of each icon,
+following an established automated annotation pipeline
+\citep{rodriguez2025starvector, xing2025llm4svg}.
 
-The resulting model, \textbf{\method}, generates valid, renderable SVG code for
-icon prompts in under one second. Unlike diffusion-based approaches, the output
-is natively editable, consistently structured, and follows the conventions
-expected by professional design and development workflows.
+The resulting model, \textbf{\method}, generates valid, renderable, monochrome
+SVG icons in under one second. Unlike diffusion-based approaches, the output
+is natively editable, consistently structured, uses \texttt{currentColor} for
+immediate brand recolouring, and follows the conventions of professional icon
+design and development workflows.
 
 \paragraph{Contributions.}
 \begin{enumerate}
@@ -64,10 +76,12 @@ expected by professional design and development workflows.
           short and long natural language descriptions using a vision language
           model, with documented prompt engineering and quality metrics.
 
-    \item \textbf{\method.} A domain-specific text-to-SVG model fine-tuned with
-          LoRA on Qwen3.5-9B, trained specifically for icon generation with
-          curriculum ordering (simple to complex) and multi-variant instruction
-          augmentation.
+    \item \textbf{\method.} A monochrome text-to-SVG model fine-tuned with
+          LoRA on Qwen3-Coder-30B, trained specifically for single-colour icon
+          generation with curriculum ordering (simple to complex) and
+          multi-variant instruction augmentation. The monochrome
+          \texttt{currentColor} constraint makes outputs immediately usable
+          across any brand or design system.
 
     \item \textbf{An icon-specific evaluation framework.} Metrics tailored to
           icon generation quality: SVG validity rate, rendering fidelity,

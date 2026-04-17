@@ -1,6 +1,6 @@
 # IconGenAI
 
-Fine-tuning a general-purpose LLM for text-to-SVG icon generation via QLoRA on the Iconify corpus.
+Fine-tuning a code language model for high-quality **monochrome** text-to-SVG icon generation via QLoRA on the Iconify corpus. Generates pixel-perfect, instantly rebrandable icons using `currentColor`.
 
 ## Prerequisites
 

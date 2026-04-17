@@ -15,12 +15,14 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\graphicspath{{../notebooks/output/}{../output/}{figures/}}
 \usepackage{booktabs}       % professional tables
 \usepackage{multirow}       % multi-row cells
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{listings}       % code listings
 \usepackage{xcolor}
+\usepackage{float}
 \usepackage{caption}
 \usepackage{subcaption}     % subfigures
 \usepackage{microtype}      % better justification
@@ -50,7 +52,7 @@
 \begin{document}
 
 \title{\method: Text-to-SVG Icon Generation via\\
-       Domain-Specific Fine-tuning of a Code Language Model}
+       Fine-tuning of a Code Language Model}
 
 \author{
   Yauheniya Varabyova \\
@@ -60,6 +62,17 @@
 
 \date{April 2026}
 \maketitle
+
+% --- Model comparison figure (page 1, before abstract) ----------------------
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{model_comparison_grid.png}
+  \caption{Qualitative comparison of code language models on monochrome SVG icon
+           generation. Rows are prompts; columns are models. Each cell shows the
+           rendered icon with SVG character count and path count below.
+           Our model (\method) column is a placeholder pending fine-tuning.}
+  \label{fig:model-comparison}
+\end{figure}
 
 % =============================================================================
 \begin{abstract}
