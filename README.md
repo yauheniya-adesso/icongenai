@@ -1,6 +1,21 @@
 # IconGenAI
 
+[![Code License](https://img.shields.io/badge/Code%20License-MIT-blue)](LICENSE)
+[![Dataset License](https://img.shields.io/badge/Dataset%20License-CC%20BY--NC%204.0-red)](https://creativecommons.org/licenses/by-nc/4.0/)
+[![Weights License](https://img.shields.io/badge/Weights%20License-CC%20BY--NC%204.0-red)](https://creativecommons.org/licenses/by-nc/4.0/)
+![Model](https://img.shields.io/badge/Base%20Model-Qwen3--Coder--30B--A3B-blue)
+![LoRA](https://img.shields.io/badge/Fine--Tuning-LoRA-blueviolet)
+![MLX](https://img.shields.io/badge/Framework-MLX--LM-orange?logo=apple&logoColor=white)
+![Status](https://img.shields.io/badge/Status-In%20Progress-orange)
+
 Fine-tuning a code language model for high-quality **monochrome** text-to-SVG icon generation via QLoRA on the Iconify corpus. Generates pixel-perfect, instantly rebrandable icons using `currentColor`.
+
+
+<p align="center">
+  <img src="notebooks/output/model_comparison_grid.png" width="100%" alt="Model Comparison Grid">
+  <br>
+  <em>Fig. 1: Qualitative comparison of code language models on monochrome SVG icon generation. Our model (IconGenAI) column is a placeholder pending fine-tuning.</em>
+</p>
 
 ## Prerequisites
 
@@ -27,7 +42,7 @@ uv sync --extra dev       # + JupyterLab, pandas, matplotlib (for notebooks)
 uv run scripts/00_download_models.py
 ```
 
-Lists available Qwen/MLX models on HuggingFace and downloads the ones needed for captioning and training.
+Lists available MLX models on HuggingFace and downloads the ones needed for captioning and training.
 
 ### Step 1 — Collect icons
 
@@ -47,6 +62,13 @@ caffeinate -i uv run scripts/02_caption.py
 ```
 
 Uses Qwen2.5-VL-7B to generate short + long natural language descriptions for each icon. Resumes automatically if interrupted — safe to restart.
+
+<p align="center">
+  <img src="notebooks/output/icon_caption_examples.png" width="100%" alt="Icon Caption Examples">
+  <br>
+  <em>Fig. 2: Sample icons and their automatically generated captions, stratified by structural complexity (1–5 `path` elements).</em>
+</p>
+
 
 See [Parallel captioning](#parallel-captioning) below to split this across two machines.
 
