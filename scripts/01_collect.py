@@ -17,6 +17,7 @@ License policy (matches research/research.md §7):
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -80,18 +81,65 @@ def count_paths(body: str) -> int:
     return body.count("<path")
 
 
-def is_multicolor(body: str) -> bool:
-    """True if the icon body contains hardcoded color values (not currentColor)."""
-    body_lower = body.lower()
-    # Exclude currentColor references, look for actual hex/rgb/named colors
-    no_current = body_lower.replace("currentcolor", "")
-    return (
-        "fill=" in no_current
-        and any(
-            token in no_current
-            for token in ["#", "rgb(", "rgba(", 'fill="white"', 'fill="black"']
-        )
+_ATTR_COLOR = re.compile(
+    r'(?:fill|stroke|stop-color|color)\s*=\s*["\']([^"\']+)["\']',
+    re.IGNORECASE,
+)
+_STYLE_COLOR = re.compile(
+    r'(?:fill|stroke|stop-color|color)\s*:\s*([^;"\'\s>]+)',
+    re.IGNORECASE,
+)
+_SKIP_COLORS = frozenset({"currentcolor", "none", "inherit", "transparent", ""})
+
+
+def extract_colors(body: str) -> set:
+    """Return unique hardcoded color strings (lowercase) found in an SVG body."""
+    vals = _ATTR_COLOR.findall(body) + _STYLE_COLOR.findall(body)
+    return {v.strip().lower() for v in vals if v.strip().lower() not in _SKIP_COLORS}
+
+
+def classify_color(body: str) -> str:
+    """
+    Returns 'monochrome', 'single_color', or 'multicolor'.
+      monochrome   — only currentColor / no hardcoded colors
+      single_color — exactly one unique hardcoded color (normalizable to currentColor)
+      multicolor   — two or more distinct hardcoded colors
+    """
+    n = len(extract_colors(body))
+    if n == 0:
+        return "monochrome"
+    if n == 1:
+        return "single_color"
+    return "multicolor"
+
+
+def normalize_to_current_color(body: str, color: str) -> str:
+    """Replace every occurrence of `color` in color attributes/styles with currentColor."""
+    esc = re.escape(color)
+    body = re.sub(
+        r'(\b(?:fill|stroke|stop-color|color)\s*=\s*["\'])' + esc + r'(["\'])',
+        r'\1currentColor\2',
+        body,
+        flags=re.IGNORECASE,
     )
+    body = re.sub(
+        r'(\b(?:fill|stroke|stop-color|color)\s*:\s*)' + esc + r'(?=[;>"\'\s]|$)',
+        r'\1currentColor',
+        body,
+        flags=re.IGNORECASE,
+    )
+    return body
+
+
+_ANIM_RE = re.compile(
+    r'<animate|<set[\s>/]|@keyframes|animation\s*:',
+    re.IGNORECASE,
+)
+
+
+def is_animated(body: str) -> bool:
+    """True if the icon body contains SMIL or CSS animation markup."""
+    return bool(_ANIM_RE.search(body))
 
 
 # ---------------------------------------------------------------------------
@@ -142,10 +190,13 @@ def collect(icon_sets_dir: Path, output_path: Path) -> None:
     # --- Process each allowed collection ---
     stats = {
         "total_written": 0,
+        "normalized_to_current_color": 0,
         "skipped_alias": 0,
         "skipped_hidden": 0,
         "skipped_missing_body": 0,
         "missing_json_files": [],
+        "by_color_class": {"monochrome": 0, "single_color": 0, "multicolor": 0},
+        "by_animated": {"static": 0, "animated": 0},
         "by_license": {},
     }
 
@@ -193,7 +244,15 @@ def collect(icon_sets_dir: Path, output_path: Path) -> None:
 
                 width = icon_data.get("width", default_width)
                 height = icon_data.get("height", default_height)
+                color_class = classify_color(body)
+                if color_class == "single_color":
+                    the_color = next(iter(extract_colors(body)))
+                    body = normalize_to_current_color(body, the_color)
+                    stats["normalized_to_current_color"] += 1
+
                 svg = assemble_svg(body, width, height)
+
+                is_anim = is_animated(body)
 
                 record = {
                     "icon_id": f"{prefix}:{icon_name}",
@@ -207,22 +266,32 @@ def collect(icon_sets_dir: Path, output_path: Path) -> None:
                     "width": width,
                     "height": height,
                     "path_count": count_paths(body),
-                    "is_multicolor": is_multicolor(body),
+                    "color_class": color_class,
+                    "is_animated": is_anim,
                 }
 
                 out.write(json.dumps(record, ensure_ascii=False) + "\n")
                 stats["total_written"] += 1
+                stats["by_color_class"][color_class] += 1
+                stats["by_animated"]["animated" if is_anim else "static"] += 1
                 stats["by_license"][license_spdx] += 1
 
     # --- Final report ---
     print(f"\n=== Collection complete ===")
     print(f"  Output file      : {output_path}")
     print(f"  Icons written    : {stats['total_written']:,}")
+    print(f"  Normalized (→currentColor): {stats['normalized_to_current_color']:,}")
     print(f"  Skipped (alias)  : {stats['skipped_alias']:,}")
     print(f"  Skipped (hidden) : {stats['skipped_hidden']:,}")
     print(f"  Skipped (no body): {stats['skipped_missing_body']:,}")
     if stats["missing_json_files"]:
         print(f"  Missing JSON     : {stats['missing_json_files']}")
+    print("\n  Icons by color class:")
+    for cls, count in stats["by_color_class"].items():
+        print(f"    {cls:<15} {count:>7,}  ({count/max(stats['total_written'], 1)*100:.1f}%)")
+    print("\n  Animated vs. static:")
+    for kind, count in stats["by_animated"].items():
+        print(f"    {kind:<10} {count:>7,}  ({count/max(stats['total_written'], 1)*100:.1f}%)")
     print("\n  Icons by license:")
     for spdx, count in sorted(stats["by_license"].items(), key=lambda x: -x[1]):
         print(f"    {spdx:<25} {count:>7,}")
