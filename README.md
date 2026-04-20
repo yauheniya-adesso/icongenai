@@ -11,12 +11,6 @@
 Fine-tuning a code language model for high-quality **monochrome** text-to-SVG icon generation via QLoRA on the Iconify corpus. Generates pixel-perfect, instantly rebrandable icons using `currentColor`.
 
 
-<p align="center">
-  <img src="notebooks/output/model_comparison_grid.png" width="100%" alt="Model Comparison Grid">
-  <br>
-  <em>Fig. 1: Qualitative comparison of code language models on monochrome SVG icon generation. Our model (IconGenAI) column is a placeholder pending fine-tuning.</em>
-</p>
-
 ## Prerequisites
 
 - macOS with Apple Silicon (training uses MLX)
@@ -66,7 +60,7 @@ Uses Qwen2.5-VL-7B to generate short + long natural language descriptions for ea
 <p align="center">
   <img src="notebooks/output/icon_caption_examples.png" width="100%" alt="Icon Caption Examples">
   <br>
-  <em>Fig. 2: Sample icons and their automatically generated captions, stratified by structural complexity (1–5 `path` elements).</em>
+  <em>Fig. 1: Sample icons and their automatically generated captions, stratified by structural complexity (1–5 `path` elements).</em>
 </p>
 
 
@@ -109,6 +103,12 @@ uv run scripts/05_generate.py --no-adapter
 # Quick sanity check on first 200 prompts:
 uv run scripts/05_generate.py --adapter models/icongenai-lora --n 200
 ```
+
+<p align="center">
+  <img src="notebooks/output/model_comparison_grid.png" width="100%" alt="Model Comparison Grid">
+  <br>
+  <em>Fig. 2: Qualitative comparison of code language models on monochrome SVG icon generation. Our model (IconGenAI) column is a placeholder pending fine-tuning.</em>
+</p>
 
 ### Step 6 — Evaluate
 
@@ -179,13 +179,5 @@ Then pass the merged file to Step 3:
 uv run scripts/03_prepare.py --input data/icons_captioned_merged.jsonl
 ```
 
----
 
-## Building the paper
 
-```bash
-cd study && make          # incremental
-cd study && make clean && make   # full rebuild
-```
-
-Requires MacTeX and uses `pdflatex` + `biber`.

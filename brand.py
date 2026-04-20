@@ -12,10 +12,10 @@ In notebooks (which run from notebooks/):
 
 blue   = "#006EC7"
 purple = "#461EBE"
-orange = "#FF9868"
-green  = "#76C800"
-pink   = "#F566BA"
 teal   = "#28DCAA"
+green  = "#76C800"
+orange = "#FF9868"
+pink   = "#F566BA"
 brown  = "#887D75"
 white  = "#FFFFFF"
 black  = "#000000"
