@@ -6,7 +6,7 @@
 ![Model](https://img.shields.io/badge/Base%20Model-Qwen3--Coder--30B--A3B-blue)
 ![LoRA](https://img.shields.io/badge/Fine--Tuning-LoRA-blueviolet)
 ![MLX](https://img.shields.io/badge/Framework-MLX--LM-orange?logo=apple&logoColor=white)
-![Status](https://img.shields.io/badge/Status-In%20Progress-orange)
+![Status](https://img.shields.io/badge/Status-In%20Progress-deepgreen)
 
 Fine-tuning a code language model for high-quality **monochrome** text-to-SVG icon generation via QLoRA on the Iconify corpus. Generates pixel-perfect, instantly rebrandable icons using `currentColor`.
 
@@ -25,7 +25,7 @@ Fine-tuning a code language model for high-quality **monochrome** text-to-SVG ic
 git clone https://github.com/yauheniya-adesso/icongenai.git
 cd icongenai
 uv sync                   # core dependencies
-uv sync --extra dev       # + JupyterLab, pandas, matplotlib (for notebooks)
+uv sync --extra dev       # Jupyter, pandas, matplotlib, etc.
 ```
 
 ## Full Pipeline
@@ -48,6 +48,21 @@ uv run scripts/01_collect.py
 # → data/icons_filtered.jsonl  (275,912 icons after license filtering)
 ```
 
+<p align="center">
+  <img src="notebooks/output/final_sample.png" width="100%" alt="Icon Examples by Path">
+  <br>
+  <em>Fig. 1: Sample icons stratified by structural complexity (1–5 `path` elements).</em>
+</p>
+
+
+The final training sample retains only static, monochrome icons (single-color icons are converted to `currentColor`; logo, brand, flag, and emoji collections are excluded), with at most 5 `path` elements and SVG string length below the 99th percentile — yielding ~214k icons. Each SVG is normalized before training: XML boilerplate and metadata tags are stripped, floating-point coordinates are rounded to 2 decimal places, whitespace is collapsed to a single space, and the `viewBox` is rescaled to `0 0 24 24` via an SVG `matrix()` transform.
+
+<p align="center">
+  <img src="notebooks/output/final_sample_svg_inspection.png" width="100%" alt="SVG Examples by Path">
+  <br>
+  <em>Fig. 2: Sample normalized SVG code stratified by structural complexity (1–5 `path` elements).</em>
+</p>
+
 ### Step 2 — Caption dataset
 
 ```bash
@@ -60,7 +75,7 @@ Uses Qwen2.5-VL-7B to generate short + long natural language descriptions for ea
 <p align="center">
   <img src="notebooks/output/icon_caption_examples.png" width="100%" alt="Icon Caption Examples">
   <br>
-  <em>Fig. 1: Sample icons and their automatically generated captions, stratified by structural complexity (1–5 `path` elements).</em>
+  <em>Fig. 3: Sample icons and their automatically generated captions, stratified by structural complexity (1–5 `path` elements).</em>
 </p>
 
 
@@ -107,7 +122,7 @@ uv run scripts/05_generate.py --adapter models/icongenai-lora --n 200
 <p align="center">
   <img src="notebooks/output/model_comparison_grid.png" width="100%" alt="Model Comparison Grid">
   <br>
-  <em>Fig. 2: Qualitative comparison of code language models on monochrome SVG icon generation. Our model (IconGenAI) column is a placeholder pending fine-tuning.</em>
+  <em>Fig. 4: Qualitative comparison of code language models on monochrome SVG icon generation. Our model (IconGenAI) column is a placeholder pending fine-tuning.</em>
 </p>
 
 ### Step 6 — Evaluate
