@@ -1,9 +1,12 @@
 icon-sets/
 research/
 study/
+hf/
+models/
+results/
 
-data/*.jsonl
-data/*.json
+data/*
+!data/.gitkeep
 
 CLAUDE.md
 

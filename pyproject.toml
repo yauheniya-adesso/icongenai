@@ -18,9 +18,12 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "python-dotenv",
+    "openai",
     "jupyterlab>=4.0",
     "pandas>=2.0",
     "matplotlib>=3.8",
     "scipy",
     "wordcloud",
+    "huggingface_hub",
 ]
